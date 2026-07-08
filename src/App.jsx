@@ -117,7 +117,7 @@ export default function Formulario() {
           required={true}  
           onChange={(e) => setCity(e.target.value)} 
         />
-        <button type="submit" onSubmit={alert('Endereço cadastrado')}>Cadastrar Endereço</button>
+        <button type="submit">Cadastrar Endereço</button>
       </form>
     </main>
   );
