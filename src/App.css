@@ -19,29 +19,39 @@ main form {
   align-items: center;
 }
 
+h2 {
+  color: black;
+  font-weight: bold;
+}
+
 main form input[type=text],
 main form #cepError {
   width: 50%;
+  background-color: #fff;
 }
 
 main form input {
   margin: 10px 0;
   padding: 10px;
   outline: none;
+  color: black;
+}
+main form input:disabled {
+  background-color: rgba(175, 175, 175, 0.5);
 }
 
 .hidden {
   display: none;
 }
 
-.input-cep-error {
-  border: 1px solid #f00;
-  background: rgba(255, 0, 0, .1);
+button {
+  padding: 10px;
+  background-color: #84f58a;
+  color: black;
+  font-size: large;
+  border-radius: 40px;
+  margin-top: 10px;
 }
-
-/* main form input[type=text]:nth-child(n+2) {
-  display: none;
-} */
 
 main form #cepError {
   color: rgba(255, 0, 0, 0.68);

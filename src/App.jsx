@@ -1,7 +1,7 @@
-import './App.css'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import './App.css';
 
-export default function CepForm() {
+export default function Formulario() {
   const [cep, setCep] = useState('');
   const [street, setStreet] = useState('');
   const [number, setNumber] = useState('');
@@ -9,39 +9,41 @@ export default function CepForm() {
   const [uf, setUf] = useState('');
   const [city, setCity] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [cepValido, setCepValido] = useState(false);
 
   useEffect(() => {
+    const cleanCep = cep.replace(/\D/g, '');
 
-    if (cep === 8) {
-      fetch(`https://viacep.com.br{cleanCep}/json/`)
+    if (cleanCep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cleanCep}/json/`)
         .then((response) => response.json())
         .then((data) => {
           if (data.erro) {
             setHasError(true);
             setStreet('');
             setNeighborhood('');
-            setUf(data.uf);;
+            setUf('');
             setCity('');
+            setCepValido(false);
           } else {
             setHasError(false);
-            setStreet(data.logradouro);
-            setNeighborhood(data.bairro);
-            setUf(data.uf);
-            setCity(data.localidade);
+            setStreet(data.logradouro || '');
+            setNeighborhood(data.bairro || '');
+            setUf(data.uf || '');
+            setCity(data.localidade || '');
+            setCepValido(true);
           }
         })
         .catch(() => {
           setHasError(true);
         });
     } else {
-
-      if (cep.length < 8) {
-        setHasError(false);
-        setStreet('');
-        setNeighborhood('');
-        setUf('');
-        setCity('');
-      }
+      setHasError(false);
+      setStreet('');
+      setNeighborhood('');
+      setUf('');
+      setCity('');
+      setCepValido(false);
     }
   }, [cep]);
 
@@ -59,29 +61,30 @@ export default function CepForm() {
           id="cep" 
           placeholder="CEP" 
           value={cep}
-          onChange={(e) => setCep(e.target.value)}
-          maxLength={8}
+          required={true} 
+          onChange={(e) => setCep(e.target.value)} 
+          maxLength={9}
         />
         
         <div id="cepError" className={hasError ? '' : 'hidden'}>
-          O CEP informado é invalido.
+          O CEP informado é inválido.
         </div>
         
         <input 
           type="text" 
           id="street" 
-          placeholder="Rua" 
+          placeholder="Avenida Primeiro de Maio" 
           value={street}
-          onChange={(e) => setStreet(e.target.value)}
-          disabled={!!street}
+          disabled={cepValido}
+          required={true}  
+          onChange={(e) => setStreet(e.target.value)} 
         />
-
         
         <input 
           type="text" 
           id="number" 
           placeholder="Número" 
-          value={number}
+          value={number} 
           onChange={(e) => setNumber(e.target.value)}
         />
         
@@ -90,8 +93,9 @@ export default function CepForm() {
           id="neighborhood" 
           placeholder="Bairro" 
           value={neighborhood}
-          onChange={(e) => setNeighborhood(e.target.value)}
-          disabled={!!neighborhood}
+          disabled={cepValido}
+          required={true} 
+          onChange={(e) => setNeighborhood(e.target.value)} 
         />
         
         <input 
@@ -99,8 +103,9 @@ export default function CepForm() {
           id="uf" 
           placeholder="Estado" 
           value={uf}
-          onChange={(e) => setUf(e.target.value)}
-          disabled={!!uf}
+          disabled={cepValido}  
+          required={true}
+          onChange={(e) => setUf(e.target.value)} 
         />
         
         <input 
@@ -108,11 +113,11 @@ export default function CepForm() {
           id="city" 
           placeholder="Cidade" 
           value={city}
-          onChange={(e) => setCity(e.target.value)}
-          disabled={!!city}
+          disabled={cepValido}
+          required={true}  
+          onChange={(e) => setCity(e.target.value)} 
         />
-        
-        <input type="submit" value="Cadastrar" />
+        <button type="submit" onSubmit={alert('Endereço cadastrado')}>Cadastrar Endereço</button>
       </form>
     </main>
   );
